@@ -77,6 +77,9 @@ This is the place for you to write reflections:
 ### Mandatory (Publisher) Reflections
 
 #### Reflection Publisher-1
+1. A single Model struct such as Subscriber is enough for this system because the subscribers are external web applications communicating through HTTP REST APIs. Since the network abstracts away what the external app is, the Main App only needs to know the url and the name of the external app. This is enough for a struct to implement. Therefore, the complexity of an interface or a trait is not necessary in this situation.
+2. For this case, I think a DashMap is necessary to implement the intended goal. Using a Vec would require a function to manually loop through the vector just to find something that is unique. A DashMap is more efficient here because it has a key-value pair mechanism where a unique key is mapped to a value. This runs in O(1) time (faster than a Vec which runs in O(N) time).
+3. Both the Singleton pattern and DashMap are required for this case. The Singleton pattern guarantees that there is exactly one global SUBSCRIBERS database in the entire application's memory. However, race conditions may happen when two or more users try to subscribe to the same product type at the exact second or close enough by a few milliseconds. DashMap fixes this problem because it is a concurrent and specialised hashmap. By using DashMap inside the Singleton pattern, thread-safety is achieved which allows multiple threads to add or delete subscribers at the same time without needing to lock the entire system.
 
 #### Reflection Publisher-2
 
